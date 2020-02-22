@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:swipe_to_delete/widgets/snack_widget.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -6,20 +7,8 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  _snackBarShow() {
-    final snackBar = SnackBar(
-      content: Text("Item Deleted"),
-      action: SnackBarAction(
-        label: "Deleted",
-        onPressed: () {
-          Navigator.pop(context, true);
-        },
-      ),
-    );
-    return snackBar;
-  }
 
-  List<String> _items = List<String>.generate(30, (i) => "items ${i + 1}");
+  List<String> items = List<String>.generate(30, (i) => "items ${i + 1}");
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,34 +17,9 @@ class _HomeState extends State<Home> {
       ),
       body: Container(
         child: ListView.builder(
-          itemCount: _items.length,
+          itemCount: items.length,
           itemBuilder: (_, index) {
-            return Dismissible(
-              key: Key(_items[index]),
-              direction: DismissDirection.startToEnd,
-              background: Container(
-                color: Colors.red,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: <Widget>[
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Icon(
-                        Icons.delete,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              onDismissed: (direction) {
-                _items.removeAt(index);
-                Scaffold.of(context).showSnackBar(_snackBarShow());
-              },
-              child: ListTile(
-                title: Text("${_items[index]}"),
-              ),
-            );
+            return SnackWidget(index: index, items: items,);
           },
         ),
       ),
